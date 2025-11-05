@@ -9,7 +9,18 @@ namespace DictionatiesForEverything.Model
 {
     class ApplicationContext : DbContext
     {
-        public ApplicationContext() {    }
+        public DbSet<Glossary> Glossaries { get; set; }
+        public DbSet<GlossaryItem> GlossaryItems { get; set; }
+
+        public ApplicationContext() 
+        { 
+            Database.EnsureCreated();
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlite("Data Source=Database.db");
+        }
     }
 }
     
