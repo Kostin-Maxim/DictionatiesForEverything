@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace DictionatiesForEverything.Model
 {
-    class GlossaryItem
+    public class GlossaryItem
     {
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public Glossary TypeId { get; set; }
+        public int GlossaryId { get; set; }
     }
 }

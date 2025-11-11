@@ -15,11 +15,11 @@ namespace DictionatiesForEverything.Model
         public ApplicationContext() 
         { 
             Database.EnsureCreated();
-        }
+       }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite("Data Source=Database.db");
+            optionsBuilder.UseSqlite(@"Data Source=D:\Projects\DictionatiesForEverything\DictionatiesForEverything\Database.db");
         }
     }
 }

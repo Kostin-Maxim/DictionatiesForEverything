@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DictionatiesForEverything.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20251105105634_InitialCreate")]
+    [Migration("20251111102726_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -44,29 +44,16 @@ namespace DictionatiesForEverything.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("GlossaryId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("TypeIdId")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("TypeIdId");
-
                     b.ToTable("GlossaryItems");
-                });
-
-            modelBuilder.Entity("DictionatiesForEverything.Model.GlossaryItem", b =>
-                {
-                    b.HasOne("DictionatiesForEverything.Model.Glossary", "TypeId")
-                        .WithMany()
-                        .HasForeignKey("TypeIdId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("TypeId");
                 });
 #pragma warning restore 612, 618
         }
