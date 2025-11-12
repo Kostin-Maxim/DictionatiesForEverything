@@ -11,20 +11,35 @@
         <vm:ManageDataVM/>
     </Window.DataContext>
     <Grid>
-        <ComboBox ItemsSource="{Binding AllGlossaries}" HorizontalAlignment="Left" Margin="10,38,0,0" VerticalAlignment="Top" Width="120" SelectedItem="{Binding SelectedGlossary, Mode=TwoWay}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <ComboBox ItemsSource="{Binding AllGlossaries}" Height="30" SelectedItem="{Binding SelectedGlossary, Mode=TwoWay}" Grid.Column="0" Grid.Row="0">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
                     <Label Content="{Binding Path=Name}"></Label>
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
-        <ListBox ItemsSource="{Binding FilteredItems}" Margin="10,108,521,77" SelectedItem="{Binding SelectedGlossaryItem, Mode=TwoWay}">
+        <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="0">
+            <Button Content="Добавить глоссарий" Command="{Binding OpenAddGlossaryWindowCommand}"/>
+            <Button Content="Удалить глоссарий"/>
+            <Button Content="Термины"/>
+        </StackPanel>
+        <ListBox ItemsSource="{Binding FilteredItems}" SelectedItem="{Binding SelectedGlossaryItem, Mode=TwoWay}" Grid.Column="0" Grid.Row="1">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Label Content="{Binding Path=Name}"/>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <TextBlock Text="{Binding SelectedGlossaryItem.Description}" Margin="300,112,28,77" Background="Blue"></TextBlock>
+        <TextBlock Text="{Binding SelectedGlossaryItem.Description}" Background="Blue" Grid.Column="1" Grid.Row="1"></TextBlock>
+        
     </Grid>
 </Window>

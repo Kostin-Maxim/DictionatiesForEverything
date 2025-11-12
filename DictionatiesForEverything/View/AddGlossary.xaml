@@ -1,0 +1,18 @@
+﻿<Window x:Class="DictionatiesForEverything.View.AddGlossary"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DictionatiesForEverything.View"
+        xmlns:vm="clr-namespace:DictionatiesForEverything.ViewModel"
+        mc:Ignorable="d"
+        Title="AddGlossary" Height="140" Width="315">
+    <Window.DataContext>
+        <vm:ManageDataVM/>
+    </Window.DataContext>
+    <StackPanel>
+        <Label Content="Название" HorizontalAlignment="Center"/>
+        <TextBox Text="{Binding NewGlossaryName, Mode=TwoWay}" Width="150" Margin="10"/>
+        <Button Content="Сохранить" Command="{Binding AddNewGlossaryCommand}"></Button>
+    </StackPanel>
+</Window>

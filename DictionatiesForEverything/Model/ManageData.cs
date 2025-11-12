@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DictionatiesForEverything.Model
 {
-    public class ManageData
+    public static class ManageData
     {
         // Получить список всех глоссариев
 
@@ -21,12 +21,27 @@ namespace DictionatiesForEverything.Model
             }
         }
 
+        // Получить список всех элементов глоссариев
         public static ObservableCollection<GlossaryItem> GetGlossaryItems()
         {
             using (ApplicationContext applicationContext = new ApplicationContext())
             {
                 applicationContext.GlossaryItems.Load();
                 return new ObservableCollection<GlossaryItem>(applicationContext.GlossaryItems.Local.ToObservableCollection());
+            }
+        }
+
+        // Добавить новый глоссарий
+
+        public static void AddGlossary(string title)
+        {
+            using (ApplicationContext applicationContext = new ApplicationContext())
+            {
+                applicationContext.Add(new Glossary
+                {
+                    Name = title
+                });
+                applicationContext.SaveChanges();
             }
         }
     }

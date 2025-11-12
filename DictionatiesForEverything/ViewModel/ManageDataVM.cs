@@ -1,4 +1,5 @@
 ﻿using DictionatiesForEverything.Model;
+using DictionatiesForEverything.View;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -7,6 +8,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace DictionatiesForEverything.ViewModel
 {
@@ -17,7 +19,19 @@ namespace DictionatiesForEverything.ViewModel
         private ObservableCollection<GlossaryItem>? _filteredItems = new ObservableCollection<GlossaryItem>();
         private Glossary? _selectedGlossary;
         private GlossaryItem? _selectedGlossaryItem;
-        
+        private string? _newGlossaryName;
+        private Window _currentMainWindow = Application.Current.MainWindow;
+
+        public string? NewGlossaryName
+        {
+            get => _newGlossaryName;
+            set
+            {
+                _newGlossaryName = value;
+                OnPropertyChanged(nameof(NewGlossaryName));
+            }
+        }
+
         public ObservableCollection<Glossary> AllGlossaries
         { 
             get => _allGlossaries;
@@ -86,6 +100,29 @@ namespace DictionatiesForEverything.ViewModel
                 FilteredItems.Add(item);
             }
         }
+
+        public RelayCommand OpenAddGlossaryWindowCommand => new RelayCommand(obj =>
+        {
+            AddGlossary addGlossary = new AddGlossary();
+            addGlossary.DataContext = this;
+            addGlossary.Owner = _currentMainWindow;
+            addGlossary.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            addGlossary.ShowDialog();
+            AllGlossaries = ManageData.GetGlossaries();
+        });
+
+        public RelayCommand AddNewGlossaryCommand => new RelayCommand(obj => 
+        {
+            if (string.IsNullOrWhiteSpace(NewGlossaryName))
+            {
+                MessageBox.Show("Название глоссария не может быть пустым или содержать только пробелы.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            ManageData.AddGlossary(NewGlossaryName);
+            Application.Current.Windows.OfType<AddGlossary>().FirstOrDefault()?.Close();
+            AllGlossaries = ManageData.GetGlossaries();
+        });
 
         // Реализация интерфейса INotifyPropertyChanged для обновления UI
         public event PropertyChangedEventHandler PropertyChanged;
