@@ -22,6 +22,10 @@ namespace DictionatiesForEverything.ViewModel
         private string? _newGlossaryName;
         private Window _currentMainWindow = Application.Current.MainWindow;
 
+        public ManageDataVM()
+        {
+            SelectedGlossary = AllGlossaries[0];
+        }
         public string? NewGlossaryName
         {
             get => _newGlossaryName;

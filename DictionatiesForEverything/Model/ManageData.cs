@@ -44,5 +44,21 @@ namespace DictionatiesForEverything.Model
                 applicationContext.SaveChanges();
             }
         }
+
+        // Добавить новый элемент глоссария
+
+        public static void AddGlossaryItem(string term, string description, int glossaryId)
+        {
+            using (ApplicationContext applicationContext = new ApplicationContext())
+            {
+                applicationContext.Add(new GlossaryItem
+                {
+                    Name = term,
+                    Description = description,
+                    GlossaryId = glossaryId
+                });
+                applicationContext.SaveChanges();
+            }
+        }
     }
 }
