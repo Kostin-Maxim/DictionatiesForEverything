@@ -21,6 +21,7 @@ namespace DictionatiesForEverything.ViewModel
         private GlossaryItem? _selectedGlossaryItem;
         private string? _newGlossaryName;
         private Window _currentMainWindow = Application.Current.MainWindow;
+        private CurrentState currentState;
 
         public ManageDataVM()
         {
@@ -105,27 +106,44 @@ namespace DictionatiesForEverything.ViewModel
             }
         }
 
-        public RelayCommand OpenAddGlossaryWindowCommand => new RelayCommand(obj =>
-        {
-            AddGlossary addGlossary = new AddGlossary();
-            addGlossary.DataContext = this;
-            addGlossary.Owner = _currentMainWindow;
-            addGlossary.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            addGlossary.ShowDialog();
-            AllGlossaries = ManageData.GetGlossaries();
-        });
+        public RelayCommand OpenAddGlossaryWindowCommand => new RelayCommand(obj => OpenNewWindow(new AddGlossaryAndTerms(), CurrentState.CreateGlossary));
+        public RelayCommand OpenAddTermWindowCommand => new RelayCommand(obj => OpenNewWindow(new AddGlossaryAndTerms(), CurrentState.CreateTerm)); 
 
-        public RelayCommand AddNewGlossaryCommand => new RelayCommand(obj => 
+        private void OpenNewWindow(Window window, CurrentState state)
         {
-            if (string.IsNullOrWhiteSpace(NewGlossaryName))
+            currentState = state;
+            window.DataContext = this;
+            window.Owner = _currentMainWindow;
+            window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            window.ShowDialog();
+        }
+
+        public RelayCommand AddNewGlossaryOrTermCommand => new RelayCommand(obj => 
+        {
+            if (currentState == CurrentState.CreateGlossary)
             {
-                MessageBox.Show("Название глоссария не может быть пустым или содержать только пробелы.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
+                if (string.IsNullOrWhiteSpace(NewGlossaryName))
+                {
+                    MessageBox.Show("Название глоссария не может быть пустым или содержать только пробелы.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                ManageData.AddGlossary(NewGlossaryName);
+            }
+            else if (currentState == CurrentState.CreateTerm)
+            {
+                if (string.IsNullOrWhiteSpace(NewGlossaryName))
+                {
+                    MessageBox.Show("Термин не может быть пустым или содержать только пробелы.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                ManageData.AddGlossaryItem(NewGlossaryName, "", SelectedGlossary.Id);
             }
 
-            ManageData.AddGlossary(NewGlossaryName);
-            Application.Current.Windows.OfType<AddGlossary>().FirstOrDefault()?.Close();
+            Application.Current.Windows.OfType<AddGlossaryAndTerms>().FirstOrDefault()?.Close();
             AllGlossaries = ManageData.GetGlossaries();
+            SelectedGlossary = AllGlossaries.Last();
         });
 
         // Реализация интерфейса INotifyPropertyChanged для обновления UI

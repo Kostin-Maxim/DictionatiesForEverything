@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DictionatiesForEverything.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,9 +18,9 @@ namespace DictionatiesForEverything.View
     /// <summary>
     /// Логика взаимодействия для AddGlossary.xaml
     /// </summary>
-    public partial class AddGlossary : Window
+    public partial class AddGlossaryAndTerms : Window
     {
-        public AddGlossary()
+        internal AddGlossaryAndTerms()
         {
             InitializeComponent();
         }
