@@ -97,7 +97,7 @@ namespace DictionatiesForEverything.ViewModel
                 return;
             }
 
-            var filter = _allItemGlossary.Where(x => x.GlossaryId == _selectedGlossary.Id).ToList();
+            var filter = AllItemGlossary.Where(x => x.GlossaryId == SelectedGlossary.Id).ToList();
             FilteredItems.Clear();
 
             foreach (var item in filter)
@@ -141,9 +141,12 @@ namespace DictionatiesForEverything.ViewModel
                 ManageData.AddGlossaryItem(NewGlossaryName, "", SelectedGlossary.Id);
             }
 
+            var curerentSelectedGlossary = SelectedGlossary;
             Application.Current.Windows.OfType<AddGlossaryAndTerms>().FirstOrDefault()?.Close();
             AllGlossaries = ManageData.GetGlossaries();
-            SelectedGlossary = AllGlossaries.Last();
+            AllItemGlossary = ManageData.GetGlossaryItems();
+            SelectedGlossary = AllGlossaries.Where(x => x.Id == curerentSelectedGlossary.Id).First();
+            FilteredItemsBySelectedGlossary();
         });
 
         // Реализация интерфейса INotifyPropertyChanged для обновления UI

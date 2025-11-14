@@ -13,6 +13,6 @@
     <StackPanel>
         <Label Content="Название" HorizontalAlignment="Center"/>
         <TextBox Text="{Binding NewGlossaryName, Mode=TwoWay}" Width="150" Margin="10"/>
-        <Button Content="Сохранить" Command="{Binding AddNewGlossaryCommand}"></Button>
+        <Button Content="Сохранить" Command="{Binding AddNewGlossaryOrTermCommand}"></Button>
     </StackPanel>
 </Window>

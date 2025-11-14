@@ -41,7 +41,7 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            <Button Content="+" Command="{Binding OpenAddTermsWindowCommand}"/>
+            <Button Content="+" Command="{Binding OpenAddTermWindowCommand}"/>
         </StackPanel>
 
         <TextBox Text="{Binding SelectedGlossaryItem.Description}" Background="BlanchedAlmond" Grid.Column="1" Grid.Row="1" TextWrapping="Wrap" ScrollViewer.VerticalScrollBarVisibility="Auto" IsEnabled="{Binding ElementName=CheckBoxIsCanChange, Path=IsChecked}"/>
