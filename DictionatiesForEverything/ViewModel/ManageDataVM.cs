@@ -109,6 +109,23 @@ namespace DictionatiesForEverything.ViewModel
         public RelayCommand OpenAddGlossaryWindowCommand => new RelayCommand(obj => OpenNewWindow(new AddGlossaryAndTerms(), CurrentState.CreateGlossary));
         public RelayCommand OpenAddTermWindowCommand => new RelayCommand(obj => OpenNewWindow(new AddGlossaryAndTerms(), CurrentState.CreateTerm)); 
 
+        public RelayCommand ChangeDescriptionTermCommand => new RelayCommand(obj =>
+        {
+            ManageData.UpdateGlossaryItem(SelectedGlossaryItem.Id, SelectedGlossaryItem.Name, SelectedGlossaryItem.Description);
+            MessageBox.Show("Термин успешно сохранен.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+        });
+
+        public RelayCommand DeleteTermCommand => new RelayCommand(obj =>
+        {
+            if(MessageBox.Show("Вы уверены, что хотите удалить этот термин?", "Подтверждение удаления", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            {
+                ManageData.DeleteGlossaryItem(SelectedGlossaryItem.Id);
+                AllItemGlossary = ManageData.GetGlossaryItems();
+                FilteredItemsBySelectedGlossary();
+                MessageBox.Show("Термин успешно удалён!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        });
+
         private void OpenNewWindow(Window window, CurrentState state)
         {
             currentState = state;

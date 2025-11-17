@@ -30,11 +30,14 @@
         <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="0">
             <Button Content="Добавить глоссарий" Command="{Binding OpenAddGlossaryWindowCommand}"/>
             <Button Content="Удалить глоссарий"/>
-
-            <CheckBox x:Name="CheckBoxIsCanChange" Content="Режим редактирования" />
+            <StackPanel>
+                <CheckBox x:Name="CheckBoxIsCanChange" Content="Режим редактирования" />
+                <Button Content="Сохранить" IsEnabled="{Binding ElementName=CheckBoxIsCanChange, Path=IsChecked}" Command="{Binding ChangeDescriptionTermCommand}"/>
+                <Button Content="Удалить термин" IsEnabled="{Binding ElementName=CheckBoxIsCanChange, Path=IsChecked}" Command="{Binding DeleteTermCommand}"/>
+            </StackPanel>
         </StackPanel>
-        <StackPanel Grid.Column="0" Grid.Row="1">
-            <ListBox ItemsSource="{Binding FilteredItems}" SelectedItem="{Binding SelectedGlossaryItem, Mode=TwoWay}" >
+        <StackPanel Grid.Column="0" Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Visible" CanVerticallyScroll="True">
+            <ListBox ItemsSource="{Binding FilteredItems}" SelectedItem="{Binding SelectedGlossaryItem, Mode=TwoWay}" ScrollViewer.VerticalScrollBarVisibility="Auto" Height="300">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Label Content="{Binding Path=Name}"/>

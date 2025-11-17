@@ -60,5 +60,36 @@ namespace DictionatiesForEverything.Model
                 applicationContext.SaveChanges();
             }
         }
+
+        // Обновить элемент глоссария
+
+        public static void UpdateGlossaryItem(int id, string name, string description)
+        {
+            using (ApplicationContext applicationContext = new ApplicationContext())
+            {
+                var item = applicationContext.GlossaryItems.FirstOrDefault(x => x.Id == id);
+                if (item != null)
+                {
+                    item.Name = name;
+                    item.Description = description;
+                    applicationContext.SaveChanges();
+                }
+            }
+        }
+
+        // Удалить элемент глоссария
+
+        public static void DeleteGlossaryItem(int id)
+        {
+            using (ApplicationContext applicationContext = new ApplicationContext())
+            {
+                var item = applicationContext.GlossaryItems.FirstOrDefault(x => x.Id == id);
+                if (item != null)
+                {
+                    applicationContext.GlossaryItems.Remove(item);
+                    applicationContext.SaveChanges();
+                }
+            }
+        }
     }
 }
