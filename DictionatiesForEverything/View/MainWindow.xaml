@@ -10,44 +10,46 @@
     <Window.DataContext>
         <vm:ManageDataVM/>
     </Window.DataContext>
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="150"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+    <DockPanel>
+        <Button Content="+" Command="{Binding OpenAddTermWindowCommand}" DockPanel.Dock="Bottom" HorizontalAlignment="Left" MinHeight="25" MinWidth="100"/>
+        <Grid DockPanel.Dock="Left" MinWidth="100">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-        <ComboBox ItemsSource="{Binding AllGlossaries}" Height="30" SelectedItem="{Binding SelectedGlossary, Mode=TwoWay}" Grid.Column="0" Grid.Row="0" >
-            <ComboBox.ItemTemplate>
-                <DataTemplate>
-                    <Label Content="{Binding Path=Name}"></Label>
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
-        </ComboBox>
-        <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="0">
-            <Button Content="Добавить глоссарий" Command="{Binding OpenAddGlossaryWindowCommand}"/>
-            <Button Content="Удалить глоссарий"/>
-            <StackPanel>
-                <CheckBox x:Name="CheckBoxIsCanChange" Content="Режим редактирования" />
-                <Button Content="Сохранить" IsEnabled="{Binding ElementName=CheckBoxIsCanChange, Path=IsChecked}" Command="{Binding ChangeDescriptionTermCommand}"/>
-                <Button Content="Удалить термин" IsEnabled="{Binding ElementName=CheckBoxIsCanChange, Path=IsChecked}" Command="{Binding DeleteTermCommand}"/>
-            </StackPanel>
-        </StackPanel>
-        <StackPanel Grid.Column="0" Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Visible" CanVerticallyScroll="True">
-            <ListBox ItemsSource="{Binding FilteredItems}" SelectedItem="{Binding SelectedGlossaryItem, Mode=TwoWay}" ScrollViewer.VerticalScrollBarVisibility="Auto" Height="300">
+            <ComboBox Grid.Row="0" ItemsSource="{Binding AllGlossaries}" Height="30" 
+                      SelectedItem="{Binding SelectedGlossary, Mode=TwoWay}" MinHeight="35">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <Label Content="{Binding Path=Name}"></Label>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+
+            <ListBox Grid.Row="1" ItemsSource="{Binding FilteredItems}" 
+                     SelectedItem="{Binding SelectedGlossaryItem, Mode=TwoWay}" 
+                     ScrollViewer.VerticalScrollBarVisibility="Auto"
+                     MaxHeight="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Window}}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Label Content="{Binding Path=Name}"/>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            <Button Content="+" Command="{Binding OpenAddTermWindowCommand}"/>
+        </Grid>
+        <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" MinHeight="35">
+            <Button Content="Добавить глоссарий" Command="{Binding OpenAddGlossaryWindowCommand}"/>
+            <Button Content="Удалить глоссарий"/>
+            <StackPanel>
+                <CheckBox x:Name="CheckBoxIsCanChange" Content="Режим редактирования" />
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="Сохранить" IsEnabled="{Binding ElementName=CheckBoxIsCanChange, Path=IsChecked}" Command="{Binding ChangeDescriptionTermCommand}"/>
+                    <Button Content="Удалить термин" IsEnabled="{Binding ElementName=CheckBoxIsCanChange, Path=IsChecked}" Command="{Binding DeleteTermCommand}"/>
+                </StackPanel>
+            </StackPanel>
         </StackPanel>
 
-        <TextBox Text="{Binding SelectedGlossaryItem.Description}" Background="BlanchedAlmond" Grid.Column="1" Grid.Row="1" TextWrapping="Wrap" ScrollViewer.VerticalScrollBarVisibility="Auto" IsEnabled="{Binding ElementName=CheckBoxIsCanChange, Path=IsChecked}"/>
-
-    </Grid>
+        <TextBox Text="{Binding SelectedGlossaryItem.Description}" Background="BlanchedAlmond" DockPanel.Dock="Right" TextWrapping="Wrap" ScrollViewer.VerticalScrollBarVisibility="Auto" IsEnabled="{Binding ElementName=CheckBoxIsCanChange, Path=IsChecked}"/>
+    </DockPanel>
 </Window>
