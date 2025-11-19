@@ -88,6 +88,7 @@ namespace DictionatiesForEverything.Model
                 {
                     applicationContext.GlossaryItems.Remove(item);
                     applicationContext.SaveChanges();
+                    
                 }
             }
         }

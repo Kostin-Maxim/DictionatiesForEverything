@@ -9,10 +9,12 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Documents;
+using System.Windows.Media;
 
 namespace DictionatiesForEverything.ViewModel
 {
-    public class ManageDataVM : INotifyPropertyChanged
+    internal class ManageDataVM : INotifyPropertyChanged
     {
         private ObservableCollection<Glossary> _allGlossaries = ManageData.GetGlossaries();
         private ObservableCollection<GlossaryItem> _allItemGlossary = ManageData.GetGlossaryItems();
@@ -22,10 +24,35 @@ namespace DictionatiesForEverything.ViewModel
         private string? _newGlossaryName;
         private Window _currentMainWindow = Application.Current.MainWindow;
         private CurrentState currentState;
+        private FontFamily _selectedFontFamily;
+        private StyleTextViaToolBar _styleTextViaToolBar;
+
+        public StyleTextViaToolBar StyleTextViaToolBar
+        {
+            get => _styleTextViaToolBar;
+            set 
+            {
+                _styleTextViaToolBar = value;
+                OnPropertyChanged(nameof(StyleTextViaToolBar));
+            }
+        }
+
+        public FontFamily SelectedFontFamily
+        {
+            get => _selectedFontFamily;
+            set
+            {
+                _selectedFontFamily = value;
+                OnPropertyChanged(nameof(SelectedFontFamily));
+            }
+        }
+        public ICollection<FontFamily> FontFamily => Fonts.SystemFontFamilies;
 
         public ManageDataVM()
         {
             SelectedGlossary = AllGlossaries[0];
+            SelectedFontFamily = FontFamily.First();
+            StyleTextViaToolBar = new StyleTextViaToolBar();
         }
         public string? NewGlossaryName
         {

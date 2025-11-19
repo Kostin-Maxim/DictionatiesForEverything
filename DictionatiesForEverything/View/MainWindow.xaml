@@ -38,18 +38,33 @@
                 </ListBox.ItemTemplate>
             </ListBox>
         </Grid>
-        <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" MinHeight="35">
-            <Button Content="Добавить глоссарий" Command="{Binding OpenAddGlossaryWindowCommand}"/>
-            <Button Content="Удалить глоссарий"/>
-            <StackPanel>
-                <CheckBox x:Name="CheckBoxIsCanChange" Content="Режим редактирования" />
-                <StackPanel Orientation="Horizontal">
-                    <Button Content="Сохранить" IsEnabled="{Binding ElementName=CheckBoxIsCanChange, Path=IsChecked}" Command="{Binding ChangeDescriptionTermCommand}"/>
-                    <Button Content="Удалить термин" IsEnabled="{Binding ElementName=CheckBoxIsCanChange, Path=IsChecked}" Command="{Binding DeleteTermCommand}"/>
+        <StackPanel Orientation="Vertical" DockPanel.Dock="Top">
+            <StackPanel Orientation="Horizontal" MinHeight="35">
+                <Button Content="Добавить глоссарий" Command="{Binding OpenAddGlossaryWindowCommand}"/>
+                <Button Content="Удалить глоссарий"/>
+                <StackPanel>
+                    <CheckBox x:Name="CheckBoxIsCanChange" Content="Режим редактирования" />
+                    <UniformGrid Rows="1" Columns="2">
+                        <Button Content="Сохранить" IsEnabled="{Binding ElementName=CheckBoxIsCanChange, Path=IsChecked}" Command="{Binding ChangeDescriptionTermCommand}"/>
+                        <Button Content="Удалить термин" IsEnabled="{Binding ElementName=CheckBoxIsCanChange, Path=IsChecked}" Command="{Binding DeleteTermCommand}"/>
+                    </UniformGrid>
                 </StackPanel>
             </StackPanel>
+            <ToolBar Height="25">
+                <ToggleButton Content="Ж" Width="20" IsChecked="{Binding StyleTextViaToolBar.IsBold}"/>
+                <ToggleButton Content="К" Width="20"/>
+                <ToggleButton Content="П" Width="20"/>
+                <Separator/>
+                <ComboBox ItemsSource="{Binding FontFamily}" SelectedItem="{Binding  SelectedFontFamily}" Width="100"/>
+            </ToolBar>
         </StackPanel>
 
-        <TextBox Text="{Binding SelectedGlossaryItem.Description}" Background="BlanchedAlmond" DockPanel.Dock="Right" TextWrapping="Wrap" ScrollViewer.VerticalScrollBarVisibility="Auto" IsEnabled="{Binding ElementName=CheckBoxIsCanChange, Path=IsChecked}"/>
+        <TextBox Text="{Binding SelectedGlossaryItem.Description}" 
+                 Background="BlanchedAlmond" 
+                 DockPanel.Dock="Right" 
+                 TextWrapping="Wrap" 
+                 ScrollViewer.VerticalScrollBarVisibility="Auto"
+                 IsEnabled="{Binding ElementName=CheckBoxIsCanChange, Path=IsChecked}"
+                 FontWeight="{Binding StyleTextViaToolBar.FontWeight, Mode=TwoWay}"/>
     </DockPanel>
 </Window>
