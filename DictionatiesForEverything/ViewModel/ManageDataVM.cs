@@ -135,6 +135,7 @@ namespace DictionatiesForEverything.ViewModel
 
         public RelayCommand OpenAddGlossaryWindowCommand => new RelayCommand(obj => OpenNewWindow(new AddGlossaryAndTerms(), CurrentState.CreateGlossary));
         public RelayCommand OpenAddTermWindowCommand => new RelayCommand(obj => OpenNewWindow(new AddGlossaryAndTerms(), CurrentState.CreateTerm)); 
+        public RelayCommand OpenUpdateTermWindowCommand => new RelayCommand(obj => OpenNewWindow(new AddGlossaryAndTerms(), CurrentState.EditTerm));
 
         public RelayCommand ChangeDescriptionTermCommand => new RelayCommand(obj =>
         {
@@ -155,7 +156,11 @@ namespace DictionatiesForEverything.ViewModel
 
         private void OpenNewWindow(Window window, CurrentState state)
         {
+            NewGlossaryName = "";
             currentState = state;
+            if (currentState == CurrentState.EditTerm)
+                NewGlossaryName = SelectedGlossaryItem?.Name;
+
             window.DataContext = this;
             window.Owner = _currentMainWindow;
             window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
@@ -184,8 +189,12 @@ namespace DictionatiesForEverything.ViewModel
 
                 ManageData.AddGlossaryItem(NewGlossaryName, "", SelectedGlossary.Id);
             }
+            else if (currentState == CurrentState.EditTerm)
+            {
+                ManageData.UpdateGlossaryItem(SelectedGlossary.Id, NewGlossaryName, SelectedGlossaryItem.Description);
+            }
 
-            var curerentSelectedGlossary = SelectedGlossary;
+                var curerentSelectedGlossary = SelectedGlossary;
             Application.Current.Windows.OfType<AddGlossaryAndTerms>().FirstOrDefault()?.Close();
             AllGlossaries = ManageData.GetGlossaries();
             AllItemGlossary = ManageData.GetGlossaryItems();

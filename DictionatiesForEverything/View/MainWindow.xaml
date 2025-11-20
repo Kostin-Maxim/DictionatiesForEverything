@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DictionatiesForEverything"
         xmlns:vm="clr-namespace:DictionatiesForEverything.ViewModel"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Window.DataContext>
@@ -31,6 +32,12 @@
                      SelectedItem="{Binding SelectedGlossaryItem, Mode=TwoWay}" 
                      ScrollViewer.VerticalScrollBarVisibility="Auto"
                      MaxHeight="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Window}}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseDoubleClick">
+                        <i:InvokeCommandAction Command="{Binding OpenUpdateTermWindowCommand}"
+                                               CommandParameter="{Binding SelectedGlossaryItem}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Label Content="{Binding Path=Name}"/>
