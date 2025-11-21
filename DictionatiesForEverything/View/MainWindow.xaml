@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:DictionatiesForEverything"
         xmlns:vm="clr-namespace:DictionatiesForEverything.ViewModel"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Window.DataContext>
@@ -66,12 +67,13 @@
             </ToolBar>
         </StackPanel>
 
-        <TextBox Text="{Binding SelectedGlossaryItem.Description}" 
-                 Background="BlanchedAlmond" 
-                 DockPanel.Dock="Right" 
-                 TextWrapping="Wrap" 
-                 ScrollViewer.VerticalScrollBarVisibility="Auto"
-                 IsEnabled="{Binding ElementName=CheckBoxIsCanChange, Path=IsChecked}"
-                 FontWeight="{Binding StyleTextViaToolBar.FontWeight, Mode=TwoWay}"/>
+        <toolkit:RichTextBox Text="{Binding SelectedGlossaryItem.Description}" 
+                             FontWeight="{Binding StyleTextViaToolBar.FontWeight, Mode=TwoWay}"
+                             IsEnabled="{Binding ElementName=CheckBoxIsCanChangem, Path=IsChecked}"
+                             DockPanel.Dock="Right">
+            <toolkit:RichTextBox.TextFormatter>
+                <toolkit:PlainTextFormatter />
+            </toolkit:RichTextBox.TextFormatter>
+        </toolkit:RichTextBox>
     </DockPanel>
 </Window>
