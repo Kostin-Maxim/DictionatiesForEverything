@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DictionatiesForEverything.Model;
+using Microsoft.EntityFrameworkCore.Query.Internal;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -6,34 +8,43 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Media;
 
 namespace DictionatiesForEverything.ViewModel
 {
-    internal class StyleTextViaToolBar
+    internal class StyleTextViaToolBar : INotifyPropertyChanged
     {
-        private bool _isBold;
-        private FontWeight _fontWeight;
-        public bool IsBold
+        private FontFamily _selectedFontFamily;
+        public FontFamily SelectedFontFamily
         {
-            get => _isBold;
+            get => _selectedFontFamily;
             set
             {
-                _isBold = value;
-                FontWeight = value ? FontWeights.Bold : FontWeights.Normal;
-                OnPropertyChanged(nameof(IsBold));
+                _selectedFontFamily = value;
+                OnPropertyChanged(nameof(SelectedFontFamily));
             }
+        }
+        public ICollection<FontFamily> FontFamilyCollection => Fonts.SystemFontFamilies;
+
+        public  StyleTextViaToolBar()
+        {
+            SelectedFontFamily = FontFamilyCollection.First();
         }
 
-        public FontWeight FontWeight
+
+        private TextSelection? _selection;
+
+        public void SetSelection(TextSelection? sel) => _selection = sel;
+        public RelayCommand BoldCommand => new RelayCommand(obj => ApplyProp(TextElement.FontWeightProperty, FontWeights.Bold));
+
+        private void ApplyProp(DependencyProperty prop, object value)
         {
-            get => _fontWeight;
-            set
-            {
-                _fontWeight = value;
-                OnPropertyChanged(nameof(FontWeight));
-            }
+            _selection.ApplyPropertyValue(prop, value);
         }
+
+
+
 
 
         // Реализация интерфейса INotifyPropertyChanged для обновления UI

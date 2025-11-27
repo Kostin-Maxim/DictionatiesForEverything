@@ -23,10 +23,9 @@ namespace DictionatiesForEverything.ViewModel
         private GlossaryItem? _selectedGlossaryItem;
         private string? _newGlossaryName;
         private Window _currentMainWindow = Application.Current.MainWindow;
-        private CurrentState currentState;
-        private FontFamily _selectedFontFamily;
+        private CurrentState _currentState;
         private StyleTextViaToolBar _styleTextViaToolBar;
-
+        
         public StyleTextViaToolBar StyleTextViaToolBar
         {
             get => _styleTextViaToolBar;
@@ -36,22 +35,9 @@ namespace DictionatiesForEverything.ViewModel
                 OnPropertyChanged(nameof(StyleTextViaToolBar));
             }
         }
-
-        public FontFamily SelectedFontFamily
-        {
-            get => _selectedFontFamily;
-            set
-            {
-                _selectedFontFamily = value;
-                OnPropertyChanged(nameof(SelectedFontFamily));
-            }
-        }
-        public ICollection<FontFamily> FontFamily => Fonts.SystemFontFamilies;
-
         public ManageDataVM()
         {
             SelectedGlossary = AllGlossaries[0];
-            SelectedFontFamily = FontFamily.First();
             StyleTextViaToolBar = new StyleTextViaToolBar();
         }
         public string? NewGlossaryName
@@ -139,6 +125,11 @@ namespace DictionatiesForEverything.ViewModel
 
         public RelayCommand ChangeDescriptionTermCommand => new RelayCommand(obj =>
         {
+            if (SelectedGlossaryItem is null)
+            {
+                MessageBox.Show("Не выбран термин");
+                return;
+            }
             ManageData.UpdateGlossaryItem(SelectedGlossaryItem.Id, SelectedGlossaryItem.Name, SelectedGlossaryItem.Description);
             MessageBox.Show("Термин успешно сохранен.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
         });
@@ -157,8 +148,8 @@ namespace DictionatiesForEverything.ViewModel
         private void OpenNewWindow(Window window, CurrentState state)
         {
             NewGlossaryName = "";
-            currentState = state;
-            if (currentState == CurrentState.EditTerm)
+            _currentState = state;
+            if (_currentState == CurrentState.EditTerm)
                 NewGlossaryName = SelectedGlossaryItem?.Name;
 
             window.DataContext = this;
@@ -169,7 +160,7 @@ namespace DictionatiesForEverything.ViewModel
 
         public RelayCommand AddNewGlossaryOrTermCommand => new RelayCommand(obj => 
         {
-            if (currentState == CurrentState.CreateGlossary)
+            if (_currentState == CurrentState.CreateGlossary)
             {
                 if (string.IsNullOrWhiteSpace(NewGlossaryName))
                 {
@@ -179,7 +170,7 @@ namespace DictionatiesForEverything.ViewModel
 
                 ManageData.AddGlossary(NewGlossaryName);
             }
-            else if (currentState == CurrentState.CreateTerm)
+            else if (_currentState == CurrentState.CreateTerm)
             {
                 if (string.IsNullOrWhiteSpace(NewGlossaryName))
                 {
@@ -189,9 +180,9 @@ namespace DictionatiesForEverything.ViewModel
 
                 ManageData.AddGlossaryItem(NewGlossaryName, "", SelectedGlossary.Id);
             }
-            else if (currentState == CurrentState.EditTerm)
+            else if (_currentState == CurrentState.EditTerm)
             {
-                ManageData.UpdateGlossaryItem(SelectedGlossary.Id, NewGlossaryName, SelectedGlossaryItem.Description);
+                ManageData.UpdateGlossaryItem(SelectedGlossaryItem.Id, NewGlossaryName, SelectedGlossaryItem.Description);
             }
 
                 var curerentSelectedGlossary = SelectedGlossary;

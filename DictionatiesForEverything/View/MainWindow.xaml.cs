@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using DictionatiesForEverything.ViewModel;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -19,6 +20,13 @@ namespace DictionatiesForEverything
         public MainWindow()
         {
             InitializeComponent();
+        }
+        // Нужно придумать, как можно переделать
+        private void RichTextBox_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+            var rtb = sender as RichTextBox;
+            if (DataContext is ManageDataVM vm)
+                vm.StyleTextViaToolBar.SetSelection(rtb.Selection);
         }
     }
 }

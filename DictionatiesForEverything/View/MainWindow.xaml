@@ -8,23 +8,26 @@
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800"
+        MinWidth="600"
+        MinHeight="250">
     <Window.DataContext>
         <vm:ManageDataVM/>
     </Window.DataContext>
+
     <DockPanel>
-        <Button Content="+" Command="{Binding OpenAddTermWindowCommand}" DockPanel.Dock="Bottom" HorizontalAlignment="Left" MinHeight="25" MinWidth="100"/>
-        <Grid DockPanel.Dock="Left" MinWidth="100">
+        <Grid x:Name="Grid" DockPanel.Dock="Left" MinWidth="150">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="25"/>
             </Grid.RowDefinitions>
 
             <ComboBox Grid.Row="0" ItemsSource="{Binding AllGlossaries}" Height="30" 
                       SelectedItem="{Binding SelectedGlossary, Mode=TwoWay}" MinHeight="35">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
-                        <Label Content="{Binding Path=Name}"></Label>
+                        <Label Content="{Binding Path=Name}"/>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
@@ -45,6 +48,8 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
+
+            <Button Grid.Row="2" Content="+" Command="{Binding OpenAddTermWindowCommand}" HorizontalAlignment="Left" Width="{Binding ElementName=Grid, Path=MinWidth}"/>
         </Grid>
         <StackPanel Orientation="Vertical" DockPanel.Dock="Top">
             <StackPanel Orientation="Horizontal" MinHeight="35">
@@ -59,18 +64,27 @@
                 </StackPanel>
             </StackPanel>
             <ToolBar Height="25">
-                <ToggleButton Content="Ж" Width="20" IsChecked="{Binding StyleTextViaToolBar.IsBold}"/>
-                <ToggleButton Content="К" Width="20"/>
-                <ToggleButton Content="П" Width="20"/>
+                <ToggleButton Content="Ж" Width="20" Command="{Binding StyleTextViaToolBar.BoldCommand}" FontWeight="Bold"/>
+                <ToggleButton Content="К" Width="20" FontStyle="Italic"/>
+                <ToggleButton>
+                    <TextBlock Text="Ч" TextDecorations="Underline"/>
+                </ToggleButton>
                 <Separator/>
-                <ComboBox ItemsSource="{Binding FontFamily}" SelectedItem="{Binding  SelectedFontFamily}" Width="100"/>
+                <ComboBox ItemsSource="{Binding StyleTextViaToolBar.FontFamilyCollection}" SelectedItem="{Binding StyleTextViaToolBar.SelectedFontFamily, Mode=TwoWay}" Width="100"/>
             </ToolBar>
         </StackPanel>
 
+        <StackPanel DockPanel.Dock="Bottom" HorizontalAlignment="Right" Orientation="Horizontal">
+            <Label Content="Строка: "/>
+            <Label Content="Столбец: "/>
+        </StackPanel>
+
+
         <toolkit:RichTextBox Text="{Binding SelectedGlossaryItem.Description}" 
-                             FontWeight="{Binding StyleTextViaToolBar.FontWeight, Mode=TwoWay}"
-                             IsEnabled="{Binding ElementName=CheckBoxIsCanChangem, Path=IsChecked}"
-                             DockPanel.Dock="Right">
+                             IsEnabled="{Binding ElementName=CheckBoxIsCanChange, Path=IsChecked}"
+                             DockPanel.Dock="Right"
+                             SelectionChanged="RichTextBox_SelectionChanged">
+            <!--Штука для русского языка-->
             <toolkit:RichTextBox.TextFormatter>
                 <toolkit:PlainTextFormatter />
             </toolkit:RichTextBox.TextFormatter>
